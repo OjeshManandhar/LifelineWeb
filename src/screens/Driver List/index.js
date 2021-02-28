@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 // packages
-import { Box, FormControlLabel, Switch, CircularProgress, InputBase } from "@material-ui/core";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {
+  Box,
+  FormControlLabel,
+  Switch,
+  CircularProgress,
+  InputBase
+} from '@material-ui/core';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SearchIcon from '@material-ui/icons/Search';
 import axios from 'axios';
 
 // hooks
-import useDriverData from "../../hooks/useDriverData";
+import useDriverData from '../../hooks/useDriverData';
 
 // components
-import NavBar from "../../components/NavBar";
-import TableView from "../../components/TableView";
-import Cards from "../../components/Cards";
-import Edit from "../../components/Edit";
+import NavBar from '../../components/NavBar';
+import TableView from '../../components/TableView';
+import Cards from '../../components/Cards';
+import Edit from '../../components/Edit';
 
 // styles
-import * as D from "./styles";
+import * as D from './styles';
 
 const DriverList = () => {
   const [view, setView] = useState(true);
@@ -26,37 +32,41 @@ const DriverList = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResult, setSearchResult] = useState([]);
 
-  const {loading} = useDriverData();
+  const { loading } = useDriverData();
 
   const handleClose = () => {
     setOpen(false);
   };
 
   useEffect(() => {
-    if(searchValue.length > 2){
-      if(parseInt(searchValue)){
-        // contact query 
-        axios.get(`/driver?&contact=${searchValue}`).then(res => {
-          setSearchResult(res.data);
-        })
+    if (searchValue.length > 2) {
+      if (parseInt(searchValue)) {
+        // contact query
+        axios
+          .get(
+            `${process.env.REACT_APP_BASE_URL}/driver?&contact=${searchValue}`
+          )
+          .then(res => {
+            setSearchResult(res.data);
+          });
+      } else {
+        axios
+          .get(`${process.env.REACT_APP_BASE_URL}/driver?&name=${searchValue}`)
+          .then(res => {
+            setSearchResult(res.data);
+          });
+        // username query
       }
-      else{
-        axios.get(`/driver?&name=${searchValue}`).then(res => {
-          setSearchResult(res.data);
-        })
-        // username query 
-      }
+    } else {
+      setSearchResult([]);
     }
-    else{
-      setSearchResult([])
-    }
-  },[searchValue])
+  }, [searchValue]);
 
   return (
     <>
       <NavBar />
 
-      <Box component="div" style={D.container}> 
+      <Box component='div' style={D.container}>
         <Box style={D.row}>
           <FormControlLabel
             style={D.toggle}
@@ -64,36 +74,41 @@ const DriverList = () => {
               <Switch
                 checked={view}
                 onChange={() => setView(!view)}
-                name={view ? "Cards" : "Table"}
+                name={view ? 'Cards' : 'Table'}
               />
             }
-            label={view ? "Cards" : "Table"}
+            label={view ? 'Cards' : 'Table'}
           />
-          
+
           <div style={D.search}>
-              <div style={D.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                onChange= {(e) => setSearchValue(e.target.value)}
-              />
+            <div style={D.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder='Search…'
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={e => setSearchValue(e.target.value)}
+            />
           </div>
-        </Box>       
-        {loading && (<CircularProgress color="secondary"/> )}
+        </Box>
+        {loading && <CircularProgress color='secondary' />}
         {view ? (
-          <Box component="div" style={D.cardsContainer}>
-            <Cards type="driver" setOpen={setOpen} setKey={setKey} searchResult={searchResult}/>
+          <Box component='div' style={D.cardsContainer}>
+            <Cards
+              type='driver'
+              setOpen={setOpen}
+              setKey={setKey}
+              searchResult={searchResult}
+            />
           </Box>
         ) : (
-          <TableView type="driver" searchResult={searchResult}/>
+          <TableView type='driver' searchResult={searchResult} />
         )}
       </Box>
       {key ? (
         <Edit
-          title={"Edit Driver info"}
-          type="driver"
+          title={'Edit Driver info'}
+          type='driver'
           open={open}
           setOpen={setOpen}
           handleClose={handleClose}

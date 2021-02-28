@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from 'react';
 
 // hook
-import { LoginContext } from "./LoginContext";
+import { LoginContext } from './LoginContext';
 
 // packages
-import axios from "axios";
-import { toast } from "react-toastify";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const useTrafficData = () => {
   const [T_loading, setLoading] = useState(true);
@@ -13,13 +13,17 @@ const useTrafficData = () => {
 
   useEffect(() => {
     axios
-      .get(`/traffic?&timestamp=${new Date().getTime()}`)
-      .then((res) => {
+      .get(
+        `${
+          process.env.REACT_APP_BASE_URL
+        }/traffic?&timestamp=${new Date().getTime()}`
+      )
+      .then(res => {
         setTusers(Array.from(res.data).sort(compare));
         setLoading(false);
       })
-      .catch((e) => {
-        toast.warn("Could not connect to server!");
+      .catch(e => {
+        toast.warn('Could not connect to server!');
       });
   }, [setTusers]);
 

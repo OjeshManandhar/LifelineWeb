@@ -12,7 +12,7 @@ import {
   CardContent,
   Avatar,
   Button,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -37,33 +37,41 @@ const Cards = ({ type, setKey, setOpen, searchResult }) => {
   }, [Dusers, Tusers, type, searchResult]);
 
   function newData(contact) {
-    const newSet = user.filter((data) => {
+    const newSet = user.filter(data => {
       return data.contact !== parseInt(contact);
     });
     setUser(newSet);
   }
 
-  const handleDelete = (url) => {
+  const handleDelete = url => {
     axios
       .delete(url)
-      .then((res) => {
+      .then(res => {
         toast.success('Succesfully deleted.');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         toast.error('Couldnot delete user. Try again!');
       });
   };
 
-  const renderAvatar = (key) => {
+  const renderAvatar = key => {
     if (key === null) {
       return <Avatar style={{ width: 90, height: 90 }} src={Dummy} />;
     } else {
       if (type === 'driver') {
-        const url = process.env.REACT_APP_BASE_URL + 'driver_pic/' + key + `?&timestamp=${new Date().getTime()}`;
+        const url =
+          process.env.REACT_APP_BASE_URL +
+          '/driver_pic/' +
+          key +
+          `?&timestamp=${new Date().getTime()}`;
         return <Avatar style={{ width: 90, height: 90 }} src={url} />;
       } else {
-        const url = process.env.REACT_APP_BASE_URL + 'traffic_pic/' + key + `?&timestamp=${new Date().getTime()}`;
+        const url =
+          process.env.REACT_APP_BASE_URL +
+          '/traffic_pic/' +
+          key +
+          `?&timestamp=${new Date().getTime()}`;
         return <Avatar style={{ width: 90, height: 90 }} src={url} />;
       }
     }
@@ -98,7 +106,7 @@ const Cards = ({ type, setKey, setOpen, searchResult }) => {
       </Card>
     );
   } else {
-    return user.map((data) => (
+    return user.map(data => (
       <>
         <Card style={C.Container} key={data.contact}>
           <CardActionArea style={C.CardContainer}>
@@ -107,7 +115,12 @@ const Cards = ({ type, setKey, setOpen, searchResult }) => {
               <Typography gutterBottom variant='h5' component='h2'>
                 {data.name}
               </Typography>
-              <Typography style={{width: 'max-content'}} variant='body2' color='textSecondary' component='p'>
+              <Typography
+                style={{ width: 'max-content' }}
+                variant='body2'
+                color='textSecondary'
+                component='p'
+              >
                 Contact: {data.contact}
                 <br />
                 Email: {data.email}

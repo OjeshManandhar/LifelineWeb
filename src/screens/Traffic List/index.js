@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   Switch,
   CircularProgress,
-  InputBase,
+  InputBase
 } from '@material-ui/core';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -42,13 +42,17 @@ const TrafficList = () => {
     if (searchValue.length > 2) {
       if (parseInt(searchValue)) {
         // contact query
-        axios.get(`/traffic?&contact=${searchValue}`).then((res) => {
-          setSearchResult(res.data);
-        });
+        axios
+          .get(
+            `${process.env.REACT_APP_BASE_URL}/traffic?&contact=${searchValue}`
+          )
+          .then(res => {
+            setSearchResult(res.data);
+          });
       } else {
         axios
-          .get(`/traffic?&name=${searchValue}`)
-          .then((res) => setSearchResult(res.data));
+          .get(`${process.env.REACT_APP_BASE_URL}/traffic?&name=${searchValue}`)
+          .then(res => setSearchResult(res.data));
         // username query
       }
     } else {
@@ -81,7 +85,7 @@ const TrafficList = () => {
             <InputBase
               placeholder='Search…'
               inputProps={{ 'aria-label': 'search' }}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={e => setSearchValue(e.target.value)}
             />
           </div>
         </Box>

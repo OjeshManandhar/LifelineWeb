@@ -18,15 +18,17 @@ const useUpdate = (o_contact, type) => {
   const [loading, setLoading] = useState(true);
   const [upload, setUpload] = useState(null);
   const [url, setUrl] = useState(null);
-  const driver_pic = '/driver_pic/' + o_contact;
-  const traffic_pic = '/traffic_pic/' + o_contact;
+  const driver_pic =
+    process.env.REACT_APP_BASE_URL + '/driver_pic/' + o_contact;
+  const traffic_pic =
+    process.env.REACT_APP_BASE_URL + '/traffic_pic/' + o_contact;
 
   useEffect(() => {
     if (type === 'driver') {
       setLoading(true);
       setUrls(process.env.REACT_APP_BASE_URL + 'driver_pic/' + o_contact);
       console.log(Dusers);
-      const data = Dusers.filter((user) => {
+      const data = Dusers.filter(user => {
         return parseInt(user.contact) === parseInt(o_contact);
       });
 
@@ -39,7 +41,7 @@ const useUpdate = (o_contact, type) => {
     } else {
       setUrls(process.env.REACT_APP_BASE_URL + 'traffic_pic/' + o_contact);
       setLoading(true);
-      const data = Tusers.filter((user) => {
+      const data = Tusers.filter(user => {
         return parseInt(user.contact) === parseInt(o_contact);
       });
       setUser(data[0]);
@@ -51,11 +53,11 @@ const useUpdate = (o_contact, type) => {
     }
   }, [Dusers, Tusers, o_contact, type]);
 
-  const createImage = (url) =>
+  const createImage = url =>
     new Promise((resolve, reject) => {
       const image = new Image();
       image.addEventListener('load', () => resolve(image));
-      image.addEventListener('error', (error) => reject(error));
+      image.addEventListener('error', error => reject(error));
       image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues on CodeSandbox
       image.src = url;
     });
@@ -115,10 +117,10 @@ const useUpdate = (o_contact, type) => {
     const canvas = await getCroppedImg(imageSrc, crop);
     var file;
     canvas.toBlob(
-      (blob) => {
+      blob => {
         file = new File([blob], 'image.jpg', {
           type: blob.type,
-          lastModified: new Date(),
+          lastModified: new Date()
         });
         setUpload(file);
       },
@@ -139,27 +141,27 @@ const useUpdate = (o_contact, type) => {
     }
   }
 
-  const handleDriverUpdate = async (e) => {
+  const handleDriverUpdate = async e => {
     e.preventDefault();
 
     await axios
       .put(
-        `/driver/` + o_contact,
+        `${process.env.REACT_APP_BASE_URL}/driver/` + o_contact,
         {
           // data to be sent
           name,
           email,
           driver_id,
-          contact,
+          contact
         },
         {}
       )
-      .then((response) => {
+      .then(response => {
         handleDriverUpload();
         toast.success('succesfully updated!');
         // window.location.reload(false);
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error('failed to update!');
         console.log(error);
       });
@@ -173,37 +175,37 @@ const useUpdate = (o_contact, type) => {
       file.append('file', upload, upload.name);
       await axios
         .post(driver_pic, file, {})
-        .then((response) => {
+        .then(response => {
           // console.log(response.statusText, "Sent image!!!!!");
           toast.success('Successfully uploaded image.');
           window.location.reload();
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     }
   };
 
-  const handleTrafficUpdate = async (e) => {
+  const handleTrafficUpdate = async e => {
     e.preventDefault();
 
     await axios
       .put(
-        `/traffic/` + o_contact,
+        `${process.env.REACT_APP_BASE_URL}/traffic/` + o_contact,
         {
           // data to be sent
           name,
           email,
-          contact,
+          contact
         },
         {}
       )
-      .then((response) => {
+      .then(response => {
         handleTrafficUpload();
         toast.success('succesfully updated!');
         // window.location.reload(false);
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error('failed to update!');
         console.log(error);
       });
@@ -217,11 +219,11 @@ const useUpdate = (o_contact, type) => {
       file.append('file', upload, upload.name);
       await axios
         .post(traffic_pic, file, {})
-        .then((response) => {
+        .then(response => {
           toast.success('Successfully uploaded image.');
           window.location.reload();
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     }
@@ -244,7 +246,7 @@ const useUpdate = (o_contact, type) => {
     url,
     setUpload,
     handlePreview,
-    generateDownload,
+    generateDownload
   };
 };
 

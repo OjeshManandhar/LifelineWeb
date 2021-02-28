@@ -13,12 +13,16 @@ const useDriverData = () => {
 
   useEffect(() => {
     axios
-      .get(`/driver?&timestamp=${new Date().getTime()}`)
-      .then((res) => {
+      .get(
+        `${
+          process.env.REACT_APP_BASE_URL
+        }/driver?&timestamp=${new Date().getTime()}`
+      )
+      .then(res => {
         setDusers(Array.from(res.data).sort(compare));
         setLoading(false);
       })
-      .catch((e) => {
+      .catch(e => {
         toast.warn('Could not connect to server!');
       });
   }, [setDusers]);
