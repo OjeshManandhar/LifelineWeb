@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import Routes from "./navigation/router";
+import Routes from './navigation/router';
 
-// import { connect } from "./sock";
+// import './sock';
 
 const App = () => {
   // connect();
