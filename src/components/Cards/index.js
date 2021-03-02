@@ -145,9 +145,11 @@ const Cards = ({ type, setKey, setOpen, searchResult }) => {
               color='secondary'
               onClick={() => {
                 if (type === 'driver') {
-                  url = '/driver/' + data.contact;
+                  url =
+                    process.env.REACT_APP_BASE_URL + '/driver/' + data.contact;
                 } else {
-                  url = '/traffic/' + data.contact;
+                  url =
+                    process.env.REACT_APP_BASE_URL + '/traffic/' + data.contact;
                 }
                 newData(data.contact);
                 handleDelete(url);
